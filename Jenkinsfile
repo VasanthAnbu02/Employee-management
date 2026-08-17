@@ -9,6 +9,13 @@ pipeline {
 
     stages {
 
+        stage('Docker Engine Check') {
+            steps {
+                bat 'docker context show'
+                bat 'docker info'
+            }
+        }
+
         stage('Build and Test') {
             steps {
                 bat 'mvnw.cmd clean test'
