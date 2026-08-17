@@ -32,5 +32,11 @@ pipeline {
                 }
             }
         }
+
+        stage('Docker Build') {
+            steps {
+                bat 'docker build -t employee-backend:%BUILD_NUMBER% .'
+            }
+        }
     }
 }
