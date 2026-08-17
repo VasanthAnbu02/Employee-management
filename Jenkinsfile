@@ -21,18 +21,23 @@ pipeline {
             }
         }
 
-        stage('Start MySQL') {
-            steps {
-                bat 'docker-compose up -d mysql'
-            }
-        }
+stage('Docker Engine Check') {
+    steps {
+        bat 'set DOCKER_HOST=npipe:////./pipe/dockerDesktopLinuxEngine&& docker version'
+    }
+}
 
-        stage('Wait for MySQL') {
-            steps {
-                bat 'docker inspect --format="{{.State.Health.Status}}" employee-mysql'
-            }
-        }
+       stage('Start MySQL') {
+    steps {
+        bat 'set DOCKER_HOST=npipe:////./pipe/dockerDesktopLinuxEngine&& docker-compose up -d mysql'
+    }
+}
 
+       stage('Check MySQL') {
+    steps {
+        bat 'set DOCKER_HOST=npipe:////./pipe/dockerDesktopLinuxEngine&& docker inspect --format="{{.State.Health.Status}}" employee-mysql'
+    }
+}
         stage('Build and Test') {
             steps {
                 bat 'mvnw.cmd clean test'
